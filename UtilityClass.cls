@@ -17,4 +17,20 @@ public with sharing class UtilityClass {
         }
         return pickListValuesList;
     }
+
+    //    Method to get lookup object based on search query
+    @AuraEnabled
+    public static List <sObject> fetchLookUpValues(String searchKeyWord, String objectName) {
+        String searchKey = '%' + searchKeyWord + '%';
+
+        List <sObject> returnList = new List <sObject> ();
+
+        String sQuery = 'SELECT Id, Name FROM ' + objectName + ' WHERE Name LIKE: searchKey';
+        List <sObject> listOfRecords = Database.query(sQuery);
+
+        for (sObject obj : listOfRecords) {
+            returnList.add(obj);
+        }
+        return returnList;
+    }
 }
